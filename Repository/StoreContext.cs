@@ -22,6 +22,7 @@ namespace WholesaleEcomBackend.Data
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<SubSubCategory> SubSubCategories { get; set; }
         public DbSet<Characteristic> Characteristics { get; set; }
+        public DbSet<ProductCharacteristic> ProductCharacteristics { get; set; }
 
 
         public override int SaveChanges()

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WholesaleEcomBackend.Data;
 
@@ -11,9 +12,11 @@ using WholesaleEcomBackend.Data;
 namespace WholesaleEcomBackend.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20240203151543_UpdateTableProduct")]
+    partial class UpdateTableProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,15 +54,15 @@ namespace WholesaleEcomBackend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8a20c65f-ae90-49aa-a934-a7953f96badc",
-                            ConcurrencyStamp = "1f57e922-ac6d-44b1-9946-9077e067907b",
+                            Id = "236ffbc3-dc0b-4063-a321-658ea013fb29",
+                            ConcurrencyStamp = "09b6ac8b-9f17-4dae-853f-fa3142081571",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "3f8cb9a4-8f13-494d-a405-52b815ee9a81",
-                            ConcurrencyStamp = "01e64537-3129-43e7-8d90-df2a4b7d6c2a",
+                            Id = "4e8c9479-18fd-47fb-87d7-f4b5ce8d1ff4",
+                            ConcurrencyStamp = "7e2ca747-46a3-431f-82a7-67ded24a3b05",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -262,9 +265,6 @@ namespace WholesaleEcomBackend.Migrations
                     b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("DisplayInFilters")
-                        .HasColumnType("bit");
-
                     b.Property<string>("IPAddress")
                         .HasColumnType("nvarchar(max)");
 
@@ -310,6 +310,7 @@ namespace WholesaleEcomBackend.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
@@ -371,7 +372,7 @@ namespace WholesaleEcomBackend.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductCharacteristics");
+                    b.ToTable("ProductCharacteristic");
                 });
 
             modelBuilder.Entity("WholesaleEcomBackend.Entities.SubCategory", b =>

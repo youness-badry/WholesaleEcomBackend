@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WholesaleEcomBackend.Data;
 
@@ -11,9 +12,11 @@ using WholesaleEcomBackend.Data;
 namespace WholesaleEcomBackend.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20240207110634_AddedColumnInCharacteristic")]
+    partial class AddedColumnInCharacteristic
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,15 +54,15 @@ namespace WholesaleEcomBackend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8a20c65f-ae90-49aa-a934-a7953f96badc",
-                            ConcurrencyStamp = "1f57e922-ac6d-44b1-9946-9077e067907b",
+                            Id = "acbf8880-1673-4c6d-9560-dbe97815da84",
+                            ConcurrencyStamp = "f6a3c497-49e7-4d20-a968-486542eb90db",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "3f8cb9a4-8f13-494d-a405-52b815ee9a81",
-                            ConcurrencyStamp = "01e64537-3129-43e7-8d90-df2a4b7d6c2a",
+                            Id = "b83934a5-9674-4ddc-864b-f9ef4ed0217f",
+                            ConcurrencyStamp = "b963ca74-9a8d-4d71-a7b8-3bec8d9e7716",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -371,7 +374,7 @@ namespace WholesaleEcomBackend.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductCharacteristics");
+                    b.ToTable("ProductCharacteristic");
                 });
 
             modelBuilder.Entity("WholesaleEcomBackend.Entities.SubCategory", b =>

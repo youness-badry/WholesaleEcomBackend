@@ -1,11 +1,11 @@
 ﻿using WholesaleEcomBackend.Dtos.CreateDtos;
 using WholesaleEcomBackend.Dtos.ReadDtos;
-using WholesaleEcomBackend.Entities;
 using WholesaleEcomBackend.Exceptions;
 using WholesaleEcomBackend.RequestFeatures;
 using WholesaleEcomBackend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using System.Collections;
 
 namespace WholesaleEcomBackend.Controllers
 {
@@ -15,26 +15,12 @@ namespace WholesaleEcomBackend.Controllers
     {
         
         private readonly IProductService _productService;
+        private readonly ICategoryService _categoryService;
 
-        public ProductsController(IProductService productService)
+        public ProductsController(IProductService productService, ICategoryService categoryService)
         {
             _productService = productService;
-        }
-
-        [HttpGet]
-        public ActionResult<List<ProductReadDto>> GetProducts([FromQuery] ProductParameters productParameters)
-        {
-            var pagedProducts = _productService.GetProductsWithPaging(productParameters);
-            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedProducts.metaData));
-            return Ok(pagedProducts.products);
-        }
-
-        [HttpGet("filter")]
-        public ActionResult<List<ProductReadDto>> GetProductsWithFilter([FromQuery] ProductParameters productParameters) 
-        {
-            var productsFiltered = _productService.GetProductsWithFilterAndPaging(productParameters);
-            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(productsFiltered.metaData));
-            return Ok(productsFiltered.products);
+            _categoryService = categoryService;
         }
 
         [HttpGet("search")]
@@ -71,5 +57,50 @@ namespace WholesaleEcomBackend.Controllers
             return CreatedAtRoute(nameof(GetProduct), new { id = createdProduct.Id }, createdProduct);
 
         }
+
+        [HttpGet("subsubcategory/{subsubcategoryId}")]
+        public ActionResult<List<ProductReadDto>> GetProductsBySubsubcategoryIdWithPagingAndFilters(int subsubcategoryId, [FromQuery] ProductParameters productParameters)
+        {
+            var subsubcategory = _categoryService.GetSubSubCategory(subsubcategoryId);
+            if (subsubcategory == null)
+            {
+                throw new SubSubCategoryNotFoundException(subsubcategoryId);
+            }
+
+            var productsWithMetaData = _productService.GetProductsBySubsubcategoryIdWithPagingAndFilters(subsubcategoryId, productParameters);
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(productsWithMetaData.metaData));
+            return Ok(productsWithMetaData.products);
+        }
+
+        [HttpGet("subsubcategory/{subsubcategoryId}/characteristics/statistics")]
+        public ActionResult<IList> GetCharacteristicsStatisticsOfProductsInSubsubcategory(int subsubcategoryId, [FromQuery] ProductParameters productParameters)
+        {
+            var subsubcategory = _categoryService.GetSubSubCategory(subsubcategoryId);
+            if (subsubcategory == null)
+            {
+                throw new SubSubCategoryNotFoundException(subsubcategoryId);
+            }
+            var listCharacteristicStatistics = _productService.GetCharacteristicStatisticsOfProductsInSubsubcategory(subsubcategoryId, productParameters);
+
+            return Ok(listCharacteristicStatistics);
+
+            
+        }
+
+        [HttpGet("subsubcategory/{subsubcategoryId}/brands/statistics")]
+        public ActionResult<IList> GetBrandsStatisticsOfProductsInSubsubcategory(int subsubcategoryId, [FromQuery] ProductParameters productParameters)
+        {
+            var subsubcategory = _categoryService.GetSubSubCategory(subsubcategoryId);
+            if (subsubcategory == null)
+            {
+                throw new SubSubCategoryNotFoundException(subsubcategoryId);
+            }
+            var listBrandsStatistics = _productService.GetBrandsStatisticsOfProductsInSubsubcategory(subsubcategoryId, productParameters);
+
+            return Ok(listBrandsStatistics);
+
+
+        }
+
     }
 }

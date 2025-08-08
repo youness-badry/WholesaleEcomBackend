@@ -23,7 +23,7 @@ namespace WholesaleEcomBackend.Repository
         public List<Characteristic> GetAllCharacteristics()
         {
             var allCharacteristics = _storeContext.Characteristics
-                                     .OrderBy(c => c.Name)
+                                     .OrderBy(c => c.Id)
                                      .Include(c => c.SubSubCategory)
                                      .ToList();
 
@@ -40,7 +40,7 @@ namespace WholesaleEcomBackend.Repository
         {
             var characteristicsOfSubSubCategory = _storeContext.Characteristics
                                                     .Where(c => c.SubSubCategoryId == subSubCategoryId)
-                                                    .OrderBy(c => c.Name)
+                                                    .OrderBy(c => c.Id)
                                                     .Include(c => c.SubSubCategory)
                                                     .ToList();
 

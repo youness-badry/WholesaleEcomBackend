@@ -2,10 +2,8 @@
 using WholesaleEcomBackend.Dtos.CreateDtos;
 using WholesaleEcomBackend.Dtos.ReadDtos;
 using WholesaleEcomBackend.Entities;
-using WholesaleEcomBackend.Repository;
 using WholesaleEcomBackend.Repository.Interfaces;
 using WholesaleEcomBackend.Services.Interfaces;
-using System.Reflection.PortableExecutable;
 
 namespace WholesaleEcomBackend.Services
 {

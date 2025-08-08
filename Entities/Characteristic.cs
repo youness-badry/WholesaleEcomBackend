@@ -7,7 +7,10 @@ namespace WholesaleEcomBackend.Entities
         [Required]
         public string Name { get; set; }
 
-        public int SubSubCategoryId { get; set; }
+        [Required]
+        public bool DisplayInFilters { get; set; }
+
+        public int SubSubCategoryId { get; set; } 
         public SubSubCategory SubSubCategory { get; set; }
 
         public List<Product> Products { get; set; }

@@ -39,7 +39,7 @@ namespace WholesaleEcomBackend.Services
             }
 
             return result;    
-        }
+        } 
 
         public async Task<bool> ValidateUser(UserForAuthenticationDto userForAuth)
         {

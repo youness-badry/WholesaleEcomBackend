@@ -40,7 +40,6 @@ namespace WholesaleEcomBackend.Controllers
             return Ok(characteristic);
 
         }
-
         
         [HttpPost]
         public ActionResult<CharacteristicReadDto> CreateCharacteristic(CharacteristicCreateDto characteristicCreateDto)

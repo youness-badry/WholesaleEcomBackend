@@ -1,5 +1,4 @@
 ﻿using WholesaleEcomBackend.Entities;
-using WholesaleEcomBackend.RequestFeatures;
 
 namespace WholesaleEcomBackend.Repository.Interfaces
 {

@@ -1,4 +1,5 @@
-﻿using WholesaleEcomBackend.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using WholesaleEcomBackend.Entities;
 
 namespace WholesaleEcomBackend.Dtos.ReadDtos
 {
@@ -6,6 +7,7 @@ namespace WholesaleEcomBackend.Dtos.ReadDtos
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public bool DisplayInFilters { get; set; }
         public SubSubCategoryReadDto SubSubCategory { get; set; }
     }
 }

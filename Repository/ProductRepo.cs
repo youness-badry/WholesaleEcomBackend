@@ -3,6 +3,7 @@ using WholesaleEcomBackend.Entities;
 using WholesaleEcomBackend.RequestFeatures;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace WholesaleEcomBackend.Data
 {
     public class ProductRepo : IProductRepo
@@ -24,58 +25,21 @@ namespace WholesaleEcomBackend.Data
                         .Where(c => c.Id == id)
                         .FirstOrDefault();
 
+            // To change with .FirstOrDefault( condition..) Directly !!!!
+
         }
 
         public Product CreateProduct(Product product)
         {
             _storeContext.Products.Add(product);
             _storeContext.SaveChanges();
+            var productCreated = GetProductById(product.Id);
+            productCreated.Name = $"{product.Brand.Name} {product.Reference}";
+            _storeContext.SaveChanges();
             return product;
         }
 
-        public PagedList<Product> GetProductsWithPaging(ProductParameters productParameters)
-        {
-            var products = _storeContext.Products
-                .OrderBy(pr => pr.Name)
-                .Skip((productParameters.PageNumber - 1) * productParameters.PageSize)
-                .Take(productParameters.PageSize)
-                .Include(pr => pr.Brand)
-                .Include(pr => pr.Characteristics)
-                .ThenInclude(c => c.ProductCharacteristics)
-                .Include(pr => pr.SubSubCategory)
-                .ToList();
-
-            var count = _storeContext.Products.Count();
-
-            return new PagedList<Product>(products, count, productParameters.PageNumber, productParameters.PageSize);
-
-        }
-
-        public PagedList<Product> GetProductsWithFilterAndPaging(ProductParameters productParameters)
-        {
-            var productsFiltered = _storeContext.Products
-                                .Where(pr => pr.Price >= productParameters.MinPrice
-                                            && pr.Price <= productParameters.MaxPrice)
-                                .OrderBy(pr => pr.Name)
-                                .Skip((productParameters.PageNumber - 1) * productParameters.PageSize)
-                                .Take(productParameters.PageSize)
-                                .Include(pr => pr.Brand)
-                                .Include(pr => pr.Characteristics)
-                                .ThenInclude(c => c.ProductCharacteristics)
-                                .Include(pr => pr.SubSubCategory)
-                                .ToList();
-
-            
-            var count = _storeContext.Products
-                        .Where(pr => pr.Price >= productParameters.MinPrice
-                                && pr.Price <= productParameters.MaxPrice)
-                        .Count();
-
-            return new PagedList<Product>(productsFiltered, count, productParameters.PageNumber, productParameters.PageSize);
-
-        }
-
-        public PagedList<Product> SearchProducts(ProductParameters productParameters)
+        public PagedList<Product> SearchProductsWithPaging(ProductParameters productParameters)
         {
             List<Product> productsSearched;
             int count;
@@ -121,6 +85,73 @@ namespace WholesaleEcomBackend.Data
 
         }
 
+        public PagedList<Product> GetProductsBySubsubcategoryIdWithPagingAndFilters(int subsubcategoryId, ProductParameters productParameters)
+        {
+            var products = _storeContext.Products
+                           .Where(p => p.SubSubCategoryId == subsubcategoryId);
+
+            if (productParameters.MinPrice != null)
+            {
+                products = products.Where(p => p.Price >= productParameters.MinPrice && p.Price <= productParameters.MaxPrice);
+
+            }
+
+             if (productParameters.Brands != null)
+            {
+                string[] brandsIds = productParameters.Brands.Split('_');
+                int[] brandsIdsNumeric = brandsIds.Select(id => int.Parse(id)).ToArray();
+                
+                products = products.Where(p => brandsIdsNumeric.Contains(p.BrandId));
+            }
+
+            if (productParameters.CharacteristicValues != null)
+            {
+                foreach(var characteristicValue in productParameters.CharacteristicValues)
+                {
+                    var characteristicName = characteristicValue.Key;
+                    string[] valuesSelected = characteristicValue.Value.Split('_');
+
+
+                    var productsIdsToKeep = (products.SelectMany(p => p.ProductCharacteristics)
+                                            .Where(pch => pch.Characteristic.Name == characteristicName
+                                                             && valuesSelected.Contains(pch.CharacteristicValue))
+                                            .Select(pch => pch.ProductId)).ToList();
+
+                    products = products.Where(p => productsIdsToKeep.Contains(p.Id));
+
+                }
+
+            }
+
+            products = products.Skip((productParameters.PageNumber - 1) * productParameters.PageSize)
+                        .Take(productParameters.PageSize)
+                        .Include(pr => pr.Brand)
+                        .Include(pr => pr.Characteristics)
+                        .ThenInclude(c => c.ProductCharacteristics)
+                        .Include(pr => pr.SubSubCategory);
+
+
+            var listProducts = products.ToList();
+
+            var count = products.Count();
+
+            return new PagedList<Product>(listProducts, count, productParameters.PageNumber, productParameters.PageSize);
+
+        }
+
+        public List<Product> GetAllProductsBySubsubcategoryId(int subsubcategoryId, ProductParameters productParameters)
+        {
+            var products = _storeContext.Products
+                            .Where(p => p.SubSubCategoryId == subsubcategoryId)
+                            .Include(pr => pr.Brand)
+                            .Include(pr => pr.Characteristics)
+                            .ThenInclude(c => c.ProductCharacteristics)
+                            .Include(pr => pr.SubSubCategory)
+                            .ToList();
+
+            return products;
+
+        }
 
     }
 }

@@ -6,11 +6,11 @@ namespace WholesaleEcomBackend.Data.Interfaces
 {
     public interface IProductRepo
     {
-        public PagedList<Product> GetProductsWithPaging(ProductParameters productParameters);
-        public PagedList<Product> GetProductsWithFilterAndPaging(ProductParameters productParameters);
-        public PagedList<Product> SearchProducts(ProductParameters productParameters);
+        public PagedList<Product> SearchProductsWithPaging(ProductParameters productParameters);
         public Product GetProductById(int id);
         public Product CreateProduct(Product product);
+        public PagedList<Product> GetProductsBySubsubcategoryIdWithPagingAndFilters(int subsubcategoryId, ProductParameters productParameters);
+        public List<Product> GetAllProductsBySubsubcategoryId(int subsubcategoryId, ProductParameters productParameters);
 
     }
 }

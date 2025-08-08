@@ -8,13 +8,8 @@ namespace WholesaleEcomBackend.Dtos.CreateDtos
     public class ProductCreateDto
     {
         [Required]
-        [MaxLength(100)]
-        public string Name { get; set; }
-
-        [Required]
         public string Reference { get; set; }
 
-        [Required]
         [MaxLength(1000)]
         public string Description { get; set; }
 
@@ -24,8 +19,10 @@ namespace WholesaleEcomBackend.Dtos.CreateDtos
         [Required]
         public string PictureUrl { get; set; }
 
+        [Required]
         public int BrandId { get; set; }
 
+        [Required]
         public int SubSubCategoryId { get; set; }
         public List<ProductCharacteristicCreateDto> ProductCharacteristics { get; set; }
     }

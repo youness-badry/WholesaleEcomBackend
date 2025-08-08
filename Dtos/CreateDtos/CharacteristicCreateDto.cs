@@ -7,6 +7,9 @@ namespace WholesaleEcomBackend.Dtos.CreateDtos
         [Required]
         public string Name { get; set; }
 
+        [Required]
+        public bool DisplayInFilters { get; set; }
+
         public int SubSubCategoryId { get; set; }
     }
 }

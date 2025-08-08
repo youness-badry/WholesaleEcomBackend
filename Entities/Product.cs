@@ -6,15 +6,14 @@ namespace WholesaleEcomBackend.Entities
 {
     public class Product : BaseEntity<int>, IEntity
     {
-        [Required]
-        [MaxLength(100)]
-        public string Name { get; set; }
+        
+        public string? Name { get; set; }
         
         [Required]
         public string Reference { get; set; }
 
-        [Required] [MaxLength(1000)]
-        public string Description { get; set; }
+        [MaxLength(1000)]
+        public string? Description { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
